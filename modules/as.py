@@ -1,6 +1,7 @@
 import asyncore, asynchat
 import traceback
 import time
+import re
 import os, socket, string, sys
 import threading
 
@@ -62,7 +63,7 @@ class Server(asyncore.dispatcher):
 
 	def handle_accept(self):
 		conn, addr = self.accept()
-		print "AS >> New connection from", addr
+#		print "AS >> New connection from", addr
 		Channel(self, conn, addr)
 
 class Network(threading.Thread):
@@ -89,10 +90,24 @@ def colorify(data):
 		data = data.replace(i, severity[i]+i+colors['normal'], 1)
 	return data
 
+def parse(data):
+	socket.setdefaulttimeout(3)
+	ip = None
+	try:
+		ip = re.findall("(?:\d{1,3}\.){3}\d{1,3}", data)[0]
+		host = ip
+		host = socket.gethostbyaddr(ip)[0]
+	except:
+		pass
+	if ip != None:
+		data = data.replace(ip, host+' ('+ip+')', 1)
+	data = data.replace('->', ' -> ', 1)
+	return colorify(data)
+
 def scheduler_handler(channel):
 	tmp = []
 	for i in globals()["actions"]:
-		tmp.append('PRIVMSG %s : %s\r\n' % (channel, colorify(i)))
+		tmp.append('PRIVMSG %s : %s\r\n' % (channel, parse(i)))
 	globals()["actions"] = []
 	return tmp
 

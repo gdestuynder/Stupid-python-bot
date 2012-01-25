@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 # Configuration
+# Rename as config.py and edit
+# Also check modules.py
+
 passwd = ""
 nick = "Dummy"
 channel = "#test"

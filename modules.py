@@ -9,7 +9,5 @@ import sys
 sys.path.append('./modules')
 
 __import__("roulette", globals(), locals(), [])
-__import__("as", globals(), locals(), [])
 
-
-mod_list = [ "roulette", "mantis" ]
+mod_list = [ "roulette" ]

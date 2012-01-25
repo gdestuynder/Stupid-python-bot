@@ -1,5 +1,6 @@
-#!/usr/bin/env python
-# Copyright (c) 2005-2012 kang@insecure.ws, dirty code licensed under the GPLv2
+#!/usr/bin/python
+# Copyright (c) 2005 kang@insecure.ws, dirty code licensed under the GPLv2
+# Copyright (c) 2012 Mozilla Corporation (gdestuynder@mozilla.com)
 # See LICENSE for details
 
 import sys, urllib, select, re
@@ -13,6 +14,7 @@ import modules
 import config
 
 joined = 0
+
 
 def debug(msg):
 	if config.debug == 1:
@@ -91,7 +93,11 @@ class Scheduler(threading.Thread):
 				try:
 					actions = sys.modules[i].scheduler_handler(config.channel)
 					if len(actions) != 0:
-						for y in actions: tsocket.send(y)
+						for y in actions:
+							try:
+								tsocket.send(y)
+							except:
+								pass
 				except AttributeError:
 					pass
 				except:
@@ -123,9 +129,13 @@ while 1:
 	if e0:
 		print "> Connection error has occured. Reconnecting."
 		bot_connect(tsocket)
-		joined =0
+		joined = 0
 	if r0:
-		data = tsocket.recv(1024)
+		try:
+			data = tsocket.recv(1024)
+		except socket.error:
+			joined = 0
+			bot_connect(tsocket)
 		debug(data);
 		if not joined:
 			if data.find("End of /MOTD command") > 0:
