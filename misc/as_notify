@@ -1,0 +1,4 @@
+#!/bin/bash
+#Small script to use with the as or mantis modules
+PORT=6668
+echo -en "$*\r\n" | nc localhost $PORT
