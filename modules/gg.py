@@ -10,10 +10,7 @@ chan_handlers = ['!gg']
 msg_handlers = []
 
 def init():
-	# NOT FOR RE-USE
-	# DO NOT COPY !!
-	# THIS LICENSE IS NOT GPL
-	google.setLicense("ciwOZhBQFHLUwAB5DLMPgBKIBCg1gnnj")
+	google.setLicense("whatever")
 
 def chanpriv_handler(nick, cmd, args):
 	raise UnhandledFunction
